@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Northwind.Shared;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Northwind.Data
 {
@@ -32,12 +33,12 @@ namespace Northwind.Data
 
             builder
                 .Property(x => x.Id)
-                .HasColumnName("categoryid");
+                .HasColumnName("categoryid")
+                .ValueGeneratedOnAdd();
 
             builder
                 .Property(x => x.Name)
                 .HasColumnName("categoryname");
-
 
             builder
                 .Property(x => x.Description)

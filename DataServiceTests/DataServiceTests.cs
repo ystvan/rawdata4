@@ -41,26 +41,26 @@ namespace DataServiceTests
             Assert.Equal("Beverages", categories.First().Name);
         }
 
-        //[Fact]
-        //public void GetCategory_ValidId_ReturnsCategoryObject()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var category = service.GetCategory(1);
-        //    Assert.Equal("Beverages", category.Name);
-        //}
+        [Fact]
+        public void GetCategory_ValidId_ReturnsCategoryObject()
+        {
+            var service = new CategoryRepository(northwindDbContext);
+            var category = service.GetById(1);
+            Assert.Equal("Beverages", category.Name);
+        }
 
-        //[Fact]
-        //public void CreateCategory_ValidData_CreteCategoryAndRetunsNewObject()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var category = service.CreateCategory("Test", "CreateCategory_ValidData_CreteCategoryAndRetunsNewObject");
-        //    Assert.True(category.Id > 0);
-        //    Assert.Equal("Test", category.Name);
-        //    Assert.Equal("CreateCategory_ValidData_CreteCategoryAndRetunsNewObject", category.Description);
+        [Fact]
+        public void CreateCategory_ValidData_CreteCategoryAndRetunsNewObject()
+        {
+            var service = new CategoryRepository(northwindDbContext);
+            var category = service.AddByNameAndDescription("Test", "CreateCategory_ValidData_CreteCategoryAndRetunsNewObject");
+            Assert.True(category.Id > 0);
+            Assert.Equal("Test", category.Name);
+            Assert.Equal("CreateCategory_ValidData_CreteCategoryAndRetunsNewObject", category.Description);
 
-        //    // cleanup
-        //    service.DeleteCategory(category.Id);
-        //}
+            // cleanup
+            service.DeleteCategory(category.Id);
+        }
 
         //[Fact]
         //public void DeleteCategory_ValidId_RemoveTheCategory()
