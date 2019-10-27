@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Northwind.Data;
 using Northwind.Data.Repositories;
 using Northwind.Shared;
-using System;
 using System.Linq;
 using Xunit;
 
@@ -62,73 +61,73 @@ namespace DataServiceTests
             service.DeleteCategory(category.Id);
         }
 
-        //[Fact]
-        //public void DeleteCategory_ValidId_RemoveTheCategory()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var category = service.CreateCategory("Test", "DeleteCategory_ValidId_RemoveTheCategory");
-        //    var result = service.DeleteCategory(category.Id);
-        //    Assert.True(result);
-        //    category = service.GetCategory(category.Id);
-        //    Assert.Null(category);
-        //}
+        [Fact]
+        public void DeleteCategory_ValidId_RemoveTheCategory()
+        {
+            var service = new CategoryRepository(northwindDbContext);
+            var category = service.AddByNameAndDescription("Test", "DeleteCategory_ValidId_RemoveTheCategory");
+            var result = service.DeleteCategory(category.Id);
+            Assert.True(result);
+            category = service.GetById(category.Id);
+            Assert.Null(category);
+        }
 
-        //[Fact]
-        //public void DeleteCategory_InvalidId_ReturnsFalse()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var result = service.DeleteCategory(-1);
-        //    Assert.False(result);
-        //}
+        [Fact]
+        public void DeleteCategory_InvalidId_ReturnsFalse()
+        {
+            var service = new CategoryRepository(northwindDbContext);
+            var result = service.DeleteCategory(-1);
+            Assert.False(result);
+        }
 
-        //[Fact]
-        //public void UpdateCategory_NewNameAndDescription_UpdateWithNewValues()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var category = service.CreateCategory("TestingUpdate", "UpdateCategory_NewNameAndDescription_UpdateWithNewValues");
+        [Fact]
+        public void UpdateCategory_NewNameAndDescription_UpdateWithNewValues()
+        {
+            var service = new CategoryRepository(northwindDbContext);
+            var category = service.AddByNameAndDescription("TestingUpdate", "UpdateCategory_NewNameAndDescription_UpdateWithNewValues");
 
-        //    var result = service.UpdateCategory(category.Id, "UpdatedName", "UpdatedDescription");
-        //    Assert.True(result);
+            var result = service.UpdateCategory(category.Id, "UpdatedName", "UpdatedDescription");
+            Assert.True(result);
 
-        //    category = service.GetCategory(category.Id);
+            category = service.GetById(category.Id);
 
-        //    Assert.Equal("UpdatedName", category.Name);
-        //    Assert.Equal("UpdatedDescription", category.Description);
+            Assert.Equal("UpdatedName", category.Name);
+            Assert.Equal("UpdatedDescription", category.Description);
 
-        //    // cleanup
-        //    service.DeleteCategory(category.Id);
-        //}
+            // cleanup
+            service.DeleteCategory(category.Id);
+        }
 
-        //[Fact]
-        //public void UpdateCategory_InvalidID_ReturnsFalse()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var result = service.UpdateCategory(-1, "UpdatedName", "UpdatedDescription");
-        //    Assert.False(result);
-        //}
+        [Fact]
+        public void UpdateCategory_InvalidID_ReturnsFalse()
+        {
+            var service = new CategoryRepository(northwindDbContext);
+            var result = service.UpdateCategory(-1, "UpdatedName", "UpdatedDescription");
+            Assert.False(result);
+        }
 
 
         ///* products */
 
-        //[Fact]
-        //public void Product_Object_HasIdNameUnitPriceQuantityPerUnitAndUnitsInStock()
-        //{
-        //    var product = new Product();
-        //    Assert.Equal(0, product.Id);
-        //    Assert.Null(product.Name);
-        //    Assert.Equal(0.0, product.UnitPrice);
-        //    Assert.Null(product.QuantityPerUnit);
-        //    Assert.Equal(0, product.UnitInStock);
-        //}
+        [Fact]
+        public void Product_Object_HasIdNameUnitPriceQuantityPerUnitAndUnitsInStock()
+        {
+            var product = new Product();
+            Assert.Equal(0, product.Id);
+            Assert.Null(product.Name);
+            Assert.Equal(0.0, product.UnitPrice);
+            Assert.Null(product.QuantityPerUnit);
+            Assert.Equal(0, product.UnitInStock);
+        }
 
-        //[Fact]
-        //public void GetProduct_ValidId_ReturnsProductWithCategory()
-        //{
-        //    var service = new EntityFrameworkRepository();
-        //    var product = service.GetProduct(1);
-        //    Assert.Equal("Chai", product.Name);
-        //    Assert.Equal("Beverages", product.Category.Name);
-        //}
+        [Fact]
+        public void GetProduct_ValidId_ReturnsProductWithCategory()
+        {
+            var service = new ProductRepository(northwindDbContext);
+            var product = service.GetById(1);
+            Assert.Equal("Chai", product.Name);
+            Assert.Equal("Beverages", product.Category.Name);
+        }
 
         //[Fact]
         //public void GetProductsByCategory_ValidId_ReturnsProductWithCategory()
