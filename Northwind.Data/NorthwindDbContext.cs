@@ -6,6 +6,16 @@ namespace Northwind.Data
 {
     public class NorthwindDbContext : DbContext
     {
+        public NorthwindDbContext()
+        {
+
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql("host=localhost;db=assignment4;uid=postgres;pwd=password");
+        }
+
         public NorthwindDbContext(DbContextOptions<NorthwindDbContext> options)
            : base(options) { }
 
@@ -16,10 +26,11 @@ namespace Northwind.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Category>(ConfigureCategory);
+            builder.Entity<Category>(ConfigureCategory);            
             builder.Entity<Product>(ConfigureProduct);
             builder.Entity<Order>(ConfigureOrder);
             builder.Entity<OrderDetails>(ConfigureOrderDetails);
+            builder.HasSequence<int>("OrderNumbers").StartsAt(9).IncrementsBy(1);
         }
 
         private void ConfigureCategory(EntityTypeBuilder<Category> builder)
@@ -32,12 +43,12 @@ namespace Northwind.Data
 
             builder
                 .Property(x => x.Id)
-                .HasColumnName("categoryid");
+                .HasColumnName("categoryid")
+                .HasDefaultValueSql("nextval('\"OrderNumbers\"')");               
 
             builder
                 .Property(x => x.Name)
                 .HasColumnName("categoryname");
-
 
             builder
                 .Property(x => x.Description)
@@ -77,11 +88,6 @@ namespace Northwind.Data
                 .WithMany()
                 .HasForeignKey(x => x.Id)
                 .OnDelete(DeleteBehavior.Cascade);
-
-            builder
-                .HasMany<OrderDetails>()
-                .WithOne()
-                .HasForeignKey(x => x.ProductId);
         }
 
         private void ConfigureOrder(EntityTypeBuilder<Order> builder) 
@@ -115,11 +121,6 @@ namespace Northwind.Data
             builder
                 .Property(x => x.ShipCity)
                 .HasColumnName("shipcity");
-
-            builder
-                .HasMany<OrderDetails>()
-                .WithOne()
-                .HasForeignKey(x => x.OrderId);
         }
 
         private void ConfigureOrderDetails(EntityTypeBuilder<OrderDetails> builder)
